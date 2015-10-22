@@ -47,6 +47,11 @@ public class FSImageViewer: UIView {
     self.scrollView.backgroundColor = UIColor.blackColor()
     // 设置scrollView的不透明度为0，即100%透明，用于展示背景逐渐出现的效果
     self.scrollView.alpha = 0.0
+    self.scrollView.delegate = self
+    self.scrollView.minimumZoomScale = 1.0 // 不能缩小
+    self.scrollView.maximumZoomScale = 3.0 // 最大放大三倍
+    self.scrollView.showsHorizontalScrollIndicator = false // 不显示水平滚动指示器，丑
+    self.scrollView.showsVerticalScrollIndicator = false // 垂直滚动指示器也不显示，丑
     
     
     self.contentImageView = UIImageView(image: imageView.image)
@@ -106,5 +111,28 @@ public class FSImageViewer: UIView {
       self.contentImageView.center = CGPoint(x: self.screenSize.width/2,
                                              y: self.screenSize.height/2)
     }
+  }
+}
+
+extension FSImageViewer: UIScrollViewDelegate {
+  // MARK: - scroll view delegate
+  
+  // 这个代理方法功能是返回scrollView中的一只subView用来承载缩放结果
+  public func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    // 需要放大缩小的是图片
+    return self.contentImageView
+  }
+  
+  // 这个代理方法在scrollView发生缩放时调用，在这里面我们随时调整图片的位置为我们想要的地方
+  public func scrollViewDidZoom(scrollView: UIScrollView) {
+    var centerX = self.screenSize.width/2
+    var centerY = self.screenSize.height/2
+    
+    // 时刻让图片出于正确的位置，当图片比屏幕大时，让图片出于scrollView.contentSize的中心，否则
+    // 就出于屏幕的中心
+    centerX = self.scrollView.contentSize.width > self.screenSize.width ? self.scrollView.contentSize.width/2 : centerX
+    centerY = self.scrollView.contentSize.height > self.screenSize.height ? self.scrollView.contentSize.height/2 : centerY
+    
+    self.contentImageView.center = CGPoint(x: centerX, y: centerY)
   }
 }
