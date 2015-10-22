@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "FSImageViewer"
+  s.name         = "SwiftFSImageViewer"
   s.version      = "1.0"
   s.summary      = "A light framework that simulate WeiXin's image viewer."
 
