@@ -13,4 +13,6 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/ldjhust/FSImageViewer.git", :tag => "1.0" }
   s.source_files  = "FSImageViewerDemo/FSImageViewerDemo/FSImageViewer/*.swift"
+
+  s.requires_arc = true
 end

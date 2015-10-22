@@ -22,8 +22,10 @@ public class FSImageViewer: UIView {
   private let screenSize: CGSize = UIScreen.mainScreen().bounds.size
   
   private var originalFrame: CGRect! // 被查看图片的初始frame，保存下来用来返回的时候用
+  weak private var originalImageView: UIImageView! // 被查看的图片引用
   private var scrollView: UIScrollView! // scrollView用来承载图片的放大、缩小、平移等各种手势
   private var contentImageView: UIImageView! // 被查看图片的拷贝，用来在scrollView上显示
+  private var contentImageViewNewFrame: CGRect!
   
   // MARK: - API
   
@@ -38,6 +40,10 @@ public class FSImageViewer: UIView {
   public func showImageView(imageView: UIImageView, atPoint: CGPoint) {
     // 记录下图片的原始frame，用来在最后返回时能够直接使用，让图片返回到最初始的状态，这样可以让浏览在视觉上更连贯
     self.originalFrame = imageView.frame
+    // 若应用原始图片，用来做返回动画时操作它
+    self.originalImageView = imageView
+    // 把原来的图片提到最顶层，这样做返回效果时不会被subView遮住
+    imageView.superview?.bringSubviewToFront(imageView)
     
     self.scrollView = UIScrollView(frame: CGRect(x: 0,
                                                  y: 0,
@@ -82,12 +88,11 @@ public class FSImageViewer: UIView {
   - returns: NA
   */
   func tapToBack() {
-    UIView.animateWithDuration(0.3, animations: {
-      self.scrollView.alpha = 0.0
-      self.contentImageView.frame = self.originalFrame
-      }) { (_) in
-        // 将scrollView从keyWindow上移除
-        self.scrollView.removeFromSuperview()
+    self.originalImageView.frame = self.contentImageViewNewFrame
+    self.scrollView.removeFromSuperview()
+    
+    UIView.animateWithDuration(0.3) {
+      self.originalImageView.frame = self.originalFrame
     }
   }
   
@@ -101,8 +106,9 @@ public class FSImageViewer: UIView {
   - returns: NA
   */
   private func startAnimate() {
+    self.scrollView.alpha = 1.0
     UIView.animateWithDuration(0.3) {
-      self.scrollView.alpha = 1.0 // scrollView由完全透明变为完全不透明
+//      self.scrollView.alpha = 1.0 // scrollView由完全透明变为完全不透明
       self.contentImageView.bounds.size.width = self.screenSize.width
       // 等比例缩放，计算出原始的height、width比例，用以推算出所需的高度
       let whRatio = self.originalFrame.height/self.originalFrame.width
@@ -111,6 +117,9 @@ public class FSImageViewer: UIView {
       self.contentImageView.center = CGPoint(x: self.screenSize.width/2,
                                              y: self.screenSize.height/2)
     }
+    
+    // 记住这个时候的图片大小，用来退出时做视觉连续性效果
+    self.contentImageViewNewFrame = self.contentImageView.frame
   }
 }
 
