@@ -53,6 +53,11 @@ public class FSImageViewer: UIView {
     self.contentImageView.bounds.size = imageView.bounds.size
     self.contentImageView.center = atPoint
     
+    // 创建一个单击手势，当用户点击图片时返回到没有图片浏览的状态
+    let backTapGesture = UITapGestureRecognizer(target: self, action: "tapToBack")
+    // 将手势添加到scrollView上
+    self.scrollView.addGestureRecognizer(backTapGesture)
+    
     // 将contentImageView添加到scrollView上，这样才可以操作
     self.scrollView.addSubview(self.contentImageView)
     // 将scrollView直接添加到keyWindow上成为最上层视图，这样才能被我们看到并进行一系列操作
@@ -60,6 +65,25 @@ public class FSImageViewer: UIView {
     
     // 通过动画来展示scrollView更友好，不会显得太突兀
     self.startAnimate()
+  }
+  
+  // MARK: - event response
+  
+  /**
+  tap手势的响应方法
+  
+  - parameter : NA
+  
+  - returns: NA
+  */
+  func tapToBack() {
+    UIView.animateWithDuration(0.3, animations: {
+      self.scrollView.alpha = 0.0
+      self.contentImageView.frame = self.originalFrame
+      }) { (_) in
+        // 将scrollView从keyWindow上移除
+        self.scrollView.removeFromSuperview()
+    }
   }
   
   // MARK: - private methods
