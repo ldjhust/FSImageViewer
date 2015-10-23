@@ -1,7 +1,9 @@
 # FSImageViewer
 
 # Introduction
-A lightweight framework that simulate WeiXin's image viewer use Swift2.0
+A lightweight framework that simulate WeiXin's image viewer use Swift2.0.
+
+use Xcode 7.0 to run the sample code.
 
 ![(shown)](https://github.com/ldjhust/FSImageViewer/blob/master/demogif.gif)
 
