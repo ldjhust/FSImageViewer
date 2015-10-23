@@ -87,7 +87,8 @@ public class FSImageViewer: UIView {
   
   - returns: NA
   */
-  func tapToBack() {
+  // 不想暴露出去，但是又想作为selector(selector需要被runtime调用)，需要用@objc修饰
+  @objc private func tapToBack() {
     self.originalImageView.frame = self.contentImageViewNewFrame
     self.scrollView.removeFromSuperview()
     
@@ -137,7 +138,7 @@ extension FSImageViewer: UIScrollViewDelegate {
     var centerX = self.screenSize.width/2
     var centerY = self.screenSize.height/2
     
-    // 时刻让图片出于正确的位置，当图片比屏幕大时，让图片出于scrollView.contentSize的中心，否则
+    // 时刻让图片处于正确的位置，当图片比屏幕大时，让图片出于scrollView.contentSize的中心，否则
     // 就出于屏幕的中心
     centerX = self.scrollView.contentSize.width > self.screenSize.width ? self.scrollView.contentSize.width/2 : centerX
     centerY = self.scrollView.contentSize.height > self.screenSize.height ? self.scrollView.contentSize.height/2 : centerY
