@@ -7,6 +7,7 @@ use Xcode 7.0 to run the sample code.
 
 ![(shown)](https://github.com/ldjhust/FSImageViewer/blob/master/demogif.gif)
 
+### Feature
 - [x] show local image view
 - [ ] show remote image view with url
 
