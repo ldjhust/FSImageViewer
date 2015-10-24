@@ -7,6 +7,9 @@ use Xcode 7.0 to run the sample code.
 
 ![(shown)](https://github.com/ldjhust/FSImageViewer/blob/master/demogif.gif)
 
+- [x] show local image view
+- [ ] show remote image view with url
+
 # Installation
 ### CocoaPods
 To integrate FSImageViewer into your Xcode project using CocoaPods, specify it in your `Podfile` like download:
